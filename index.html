@@ -185,7 +185,8 @@
   .network-art{ position:relative; height:220px; }
 
   .process-band .wrap{ }
-  .process-flow{ display:flex; justify-content:space-between; align-items:center; margin-top:2.2rem; gap:.5rem; }
+  .process-row{ margin-top:2.2rem; }
+  .process-flow{ display:flex; justify-content:space-between; align-items:center; gap:.5rem; }
   .process-step{ display:flex; flex-direction:column; align-items:center; gap:.6rem; flex:1; text-align:center; }
   .process-dot{
     width:44px; height:44px; border-radius:50%; border:1.5px solid color-mix(in srgb, var(--night-text) 35%, transparent);
@@ -194,9 +195,15 @@
   .process-step.active .process-dot{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
   .process-line{ flex:1; height:0; border-top:2px dashed color-mix(in srgb, var(--night-text) 30%, transparent); margin-top:-30px; }
   .process-step span{ font-size:.78rem; font-family:var(--font-mono); letter-spacing:.02em; color:color-mix(in srgb, var(--night-text) 75%, transparent); }
+  .process-note{
+    display:none; margin:0; max-width:26ch; font-family:var(--font-mono); font-size:.82rem;
+    line-height:1.55; letter-spacing:.01em; color:color-mix(in srgb, var(--night-text) 70%, transparent);
+  }
   @media (max-width:640px){
-    .process-flow{ flex-direction:column; align-items:flex-start; }
+    .process-row{ display:flex; align-items:flex-start; gap:1.4rem; }
+    .process-flow{ flex-direction:column; align-items:flex-start; flex:0 0 auto; }
     .process-line{ display:none; }
+    .process-note{ display:block; flex:1; padding-top:.4rem; }
   }
 
   .testimonial{ text-align:center; max-width:680px; margin:0 auto; }
@@ -434,14 +441,17 @@
       <p class="eyebrow">Cum lucrăm</p>
       <h2>Un proces simplu, de la prima discuție la rezultat.</h2>
       <p>Fără etape ascunse și fără livrări la nesfârșit — știi mereu ce urmează.</p>
-      <div class="process-flow" aria-hidden="false">
-        <div class="process-step active"><div class="process-dot">01</div><span>Discuție</span></div>
-        <div class="process-line"></div>
-        <div class="process-step"><div class="process-dot">02</div><span>Prototip</span></div>
-        <div class="process-line"></div>
-        <div class="process-step"><div class="process-dot">03</div><span>Livrare</span></div>
-        <div class="process-line"></div>
-        <div class="process-step"><div class="process-dot">04</div><span>Suport</span></div>
+      <div class="process-row">
+        <div class="process-flow" aria-hidden="false">
+          <div class="process-step active"><div class="process-dot">01</div><span>Discuție</span></div>
+          <div class="process-line"></div>
+          <div class="process-step"><div class="process-dot">02</div><span>Prototip</span></div>
+          <div class="process-line"></div>
+          <div class="process-step"><div class="process-dot">03</div><span>Livrare</span></div>
+          <div class="process-line"></div>
+          <div class="process-step"><div class="process-dot">04</div><span>Suport</span></div>
+        </div>
+        <p class="process-note">Fiecare etapă se încheie cu ceva concret pe care îl vezi și îl aprobi, înainte să trecem la următoarea.</p>
       </div>
       <a class="btn btn-primary" href="#contact" style="margin-top:2.4rem;">Discută un proiect</a>
     </div>
