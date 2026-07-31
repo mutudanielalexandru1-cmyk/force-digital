@@ -1,0 +1,724 @@
+<title>Force Digital — Automatizări AI &amp; Website-uri</title>
+<style>
+  :root{
+    --paper:#0a0b12; --paper-raised:#151729; --ink:#f2f2fa; --ink-soft:#9698b5;
+    --accent:#6b3fe0; --accent-ink:#ffffff; --accent-2:#3b6df0; --accent-bright:#9d7bff;
+    --line:rgba(242,242,250,.14); --shadow:0 20px 44px -18px rgba(0,0,0,.7);
+    --night-bg:#05060a; --night-text:#f2f2fa;
+    --font-display:ui-monospace,"SF Mono","JetBrains Mono","Roboto Mono",Menlo,Consolas,monospace;
+    --font-body:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --wa:#128C7E; --wa-ink:#ffffff;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#0a0b12; --paper-raised:#151729; --ink:#f2f2fa; --ink-soft:#9698b5;
+      --accent:#6b3fe0; --accent-2:#3b6df0; --accent-bright:#9d7bff;
+      --line:rgba(242,242,250,.14); --shadow:0 20px 44px -18px rgba(0,0,0,.7);
+      --night-bg:#05060a; --night-text:#f2f2fa;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0a0b12; --paper-raised:#151729; --ink:#f2f2fa; --ink-soft:#9698b5;
+    --accent:#6b3fe0; --accent-2:#3b6df0; --accent-bright:#9d7bff;
+    --line:rgba(242,242,250,.14); --shadow:0 20px 44px -18px rgba(0,0,0,.7);
+    --night-bg:#05060a; --night-text:#f2f2fa;
+  }
+  :root[data-theme="light"]{
+    --paper:#0a0b12; --paper-raised:#151729; --ink:#f2f2fa; --ink-soft:#9698b5;
+    --accent:#6b3fe0; --accent-2:#3b6df0; --accent-bright:#9d7bff;
+    --line:rgba(242,242,250,.14); --shadow:0 20px 44px -18px rgba(0,0,0,.7);
+    --night-bg:#05060a; --night-text:#f2f2fa;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto;} }
+  body{
+    margin:0; background:
+      linear-gradient(var(--paper),var(--paper)) ;
+    background-color:var(--paper); color:var(--ink);
+    font-family:var(--font-body); line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  img,svg{display:block; max-width:100%;}
+  a{color:inherit;}
+  h1,h2,h3{font-family:var(--font-display); text-transform:uppercase; text-wrap:balance; line-height:1.1; margin:0; letter-spacing:-.01em;}
+  .wrap{max-width:1120px; margin:0 auto; padding-inline:24px;}
+  .eyebrow{
+    font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.14em;
+    font-size:.72rem; color:var(--accent-2); font-weight:700;
+  }
+  .night .eyebrow{ color:var(--accent); }
+  p{color:var(--ink-soft); max-width:60ch;}
+  .btn{
+    display:inline-flex; align-items:center; gap:.5rem; justify-content:center;
+    font-family:var(--font-body); font-weight:700; font-size:.95rem;
+    padding:.85rem 1.4rem; border-radius:3px; border:1.5px solid transparent;
+    cursor:pointer; text-decoration:none; white-space:nowrap;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:focus-visible{ outline:3px solid var(--accent-2); outline-offset:2px; }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn-primary{ background:var(--accent); color:var(--accent-ink); }
+  .btn-primary:hover{ box-shadow:var(--shadow); }
+  .btn-ghost{ background:transparent; border-color:currentColor; color:inherit; }
+  .btn-line{ background:transparent; border-color:var(--line); color:var(--ink); }
+  .btn-whatsapp{ background:var(--wa); color:var(--wa-ink); }
+  .btn-whatsapp:hover{ box-shadow:var(--shadow); }
+  .icon{ width:20px; height:20px; stroke:currentColor; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0;}
+
+  #header-orb{
+    position:fixed; top:0; left:0; width:100%; height:84px; z-index:30; pointer-events:none; display:block;
+  }
+  @media (prefers-reduced-motion:reduce){ #header-orb{ display:none; } }
+
+  /* header */
+  header{
+    position:sticky; top:0; z-index:40; background:color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter:blur(10px); border-bottom:1px dashed var(--line);
+  }
+  .headerbar{ display:flex; align-items:center; justify-content:space-between; padding-block:14px; gap:1.5rem; }
+  .logo{
+    display:flex; flex-direction:column; gap:.15rem; flex-shrink:0;
+    text-decoration:none; color:var(--ink); line-height:1.1;
+  }
+  .logo b{ font-family:var(--font-display); font-size:1.1rem; letter-spacing:-.01em; text-transform:uppercase; white-space:nowrap; }
+  .logo span{ font-family:var(--font-mono); font-size:.62rem; text-transform:uppercase; letter-spacing:.12em; color:var(--accent-2); white-space:nowrap; }
+  nav.links{ display:flex; gap:1.4rem; font-size:.92rem; font-weight:600; flex-shrink:0; }
+  nav.links a{ text-decoration:none; white-space:nowrap; }
+  nav.links a:hover{ color:var(--accent-2); }
+  .header-cta{ display:flex; align-items:center; gap:.8rem; flex-shrink:0; }
+  .burger{ display:none; background:none; border:1px solid var(--line); border-radius:3px; padding:.5rem; cursor:pointer; color:var(--ink); }
+  @media (max-width:1180px){
+    nav.links{ display:none; }
+    .header-cta .btn-line{ display:none; }
+    .burger{ display:inline-flex; }
+  }
+  @media (max-width:420px){
+    .logo span{ display:none; }
+  }
+  #mobilenav{
+    display:none; flex-direction:column; gap:.9rem; padding:1rem 24px 1.4rem; border-bottom:1px dashed var(--line);
+    background:var(--paper);
+  }
+  #mobilenav.open{ display:flex; }
+  #mobilenav a{ text-decoration:none; font-weight:600; }
+
+  /* hero */
+  .hero{ position:relative; padding-block:88px 64px; overflow:hidden; }
+  .hero-bg{ position:absolute; inset:-10% -5% auto -5%; height:120%; opacity:.28; z-index:0; pointer-events:none; }
+  .hero .wrap{ position:relative; z-index:1; }
+  .hero-type{ display:flex; flex-direction:column; gap:.06em; margin-block:1.1rem 1.6rem; }
+  .hero-type .line{
+    font-family:var(--font-display); text-transform:uppercase; font-weight:700;
+    font-size:clamp(2.1rem, 6vw, 4.2rem); line-height:.98; letter-spacing:-.01em;
+  }
+  .hero-type .l1{ align-self:flex-start; color:var(--ink); }
+  .hero-type .l2{
+    align-self:center; background:linear-gradient(90deg, var(--accent-bright), var(--accent-2));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero-type .l3{ align-self:flex-end; color:var(--ink); text-align:right; }
+  .hero-copy{ max-width:52ch; }
+  @media (max-width:640px){
+    .hero-type .line{ font-size:clamp(1.7rem,9vw,2.6rem); }
+  }
+  .hero-actions{ display:flex; gap:.9rem; flex-wrap:wrap; margin-top:1.6rem; }
+  .flow-art{ position:relative; }
+  .flow-pulse{ offset-path: path("M40,86 C 120,26 160,26 200,54 C 260,92 300,92 360,80"); offset-rotate:0deg; animation:pulse 4.5s linear infinite; }
+  @keyframes pulse{ 0%{ offset-distance:0%; opacity:0;} 8%{opacity:1;} 92%{opacity:1;} 100%{ offset-distance:100%; opacity:0; } }
+  @media (prefers-reduced-motion:reduce){ .flow-pulse{ animation:none; offset-distance:50%; opacity:1; } }
+  .node-label{ font-family:var(--font-mono); font-size:10px; fill:var(--ink-soft); }
+
+  .band{ padding-block:52px; }
+  .night{ background:var(--night-bg); color:var(--night-text); }
+  .night p{ color:color-mix(in srgb, var(--night-text) 70%, transparent); }
+  .call-stack{ display:flex; flex-direction:column; align-items:center; gap:1.1rem; max-width:640px; margin:0 auto; text-align:center; }
+  .call-question{ font-size:clamp(1.9rem,4vw + 1rem,3rem); }
+  .call-stack .actions{ display:flex; gap:.8rem; flex-wrap:wrap; justify-content:center; margin-top:.3rem; }
+
+  .lane{ border-top:2px dashed var(--line); }
+
+  section{ padding-block:64px; }
+  .section-head{ max-width:640px; margin-bottom:2.6rem; }
+  .section-head h2{ font-size:clamp(1.5rem,2.2vw + 1rem,2.2rem); margin-top:.5rem; }
+  .section-head.split{
+    max-width:none; display:grid; grid-template-columns:.85fr 1.15fr; gap:2rem;
+    align-items:end; margin-bottom:3rem;
+  }
+  .section-head.split .label-col p:last-child{ margin-top:.7rem; font-size:.92rem; }
+  .section-head.split h2{ font-size:clamp(2rem,4vw + 1rem,3.2rem); margin-top:0; }
+  @media (max-width:720px){
+    .section-head.split{ grid-template-columns:1fr; gap:1rem; }
+  }
+
+  .cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem; }
+  @media (max-width:900px){ .cards{ grid-template-columns:1fr; } }
+  .card{
+    background:var(--paper-raised); border:1px solid var(--line); border-radius:6px;
+    padding:1.8rem; display:flex; flex-direction:column; gap:.9rem;
+  }
+  .card-icon{
+    width:46px; height:46px; border-radius:50%; background:color-mix(in srgb, var(--accent) 18%, transparent);
+    display:flex; align-items:center; justify-content:center; color:var(--accent-2);
+  }
+  .card h3{ font-size:1rem; text-transform:none; letter-spacing:0; }
+  .card a{ text-decoration:none; font-weight:700; font-size:.86rem; color:var(--accent-2); font-family:var(--font-mono); }
+  .card a:hover{ text-decoration:underline; }
+
+  .reasons-grid{ display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; }
+  @media (max-width:900px){ .reasons-grid{ grid-template-columns:1fr; } }
+  .reasons-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:1.3rem; }
+  .reasons-list li{ display:flex; gap:.9rem; align-items:flex-start; }
+  .check{
+    flex-shrink:0; width:26px; height:26px; border-radius:50%; background:var(--accent);
+    display:flex; align-items:center; justify-content:center; color:var(--accent-ink); margin-top:.15rem;
+  }
+  .reasons-list strong{ display:block; font-size:1rem; font-family:var(--font-display); text-transform:uppercase; letter-spacing:-.005em; font-size:.92rem; }
+  .network-art{ position:relative; height:220px; }
+
+  .process-band .wrap{ }
+  .process-flow{ display:flex; justify-content:space-between; align-items:center; margin-top:2.2rem; gap:.5rem; }
+  .process-step{ display:flex; flex-direction:column; align-items:center; gap:.6rem; flex:1; text-align:center; }
+  .process-dot{
+    width:44px; height:44px; border-radius:50%; border:1.5px solid color-mix(in srgb, var(--night-text) 35%, transparent);
+    display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:.85rem;
+  }
+  .process-step.active .process-dot{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+  .process-line{ flex:1; height:0; border-top:2px dashed color-mix(in srgb, var(--night-text) 30%, transparent); margin-top:-30px; }
+  .process-step span{ font-size:.78rem; font-family:var(--font-mono); letter-spacing:.02em; color:color-mix(in srgb, var(--night-text) 75%, transparent); }
+  @media (max-width:640px){
+    .process-flow{ flex-direction:column; align-items:flex-start; }
+    .process-line{ display:none; }
+  }
+
+  .testimonial{ text-align:center; max-width:680px; margin:0 auto; }
+  .avatar{
+    width:56px; height:56px; border-radius:50%; margin:0 auto 1.2rem; background:var(--accent);
+    color:var(--accent-ink); display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-size:1rem;
+  }
+  .testimonial blockquote{ margin:0 0 1rem; font-size:1.2rem; font-family:var(--font-display); text-transform:none; letter-spacing:0; line-height:1.4; color:var(--ink); }
+  .testimonial cite{ font-style:normal; font-family:var(--font-mono); font-size:.8rem; letter-spacing:.06em; color:var(--ink-soft); }
+
+  .reviews{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem; }
+  @media (max-width:900px){ .reviews{ grid-template-columns:1fr; } }
+  .review{ border:1px solid var(--line); border-radius:6px; padding:1.6rem; background:var(--paper-raised); }
+  .stars{ display:flex; gap:2px; color:var(--accent); margin-bottom:.8rem; }
+  .stars svg{ width:15px; height:15px; fill:currentColor; stroke:none; }
+  .review p{ color:var(--ink); font-size:.95rem; }
+  .review-name{ font-family:var(--font-mono); font-size:.75rem; letter-spacing:.06em; color:var(--ink-soft); text-transform:uppercase; margin-top:.6rem; }
+
+  footer{ background:var(--night-bg); color:var(--night-text); padding-block:52px 110px; }
+  .foot-grid{ display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:2.4rem; }
+  @media (max-width:720px){ .foot-grid{ grid-template-columns:1fr; } }
+  .foot-grid h4{ font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; color:var(--accent); margin:0 0 1rem; }
+  .foot-grid ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.6rem; font-size:.92rem; }
+  .foot-grid a{ text-decoration:none; color:color-mix(in srgb, var(--night-text) 82%, transparent); }
+  .foot-grid a:hover{ color:var(--accent); }
+  .foot-bottom{
+    margin-top:2.6rem; padding-top:1.6rem; border-top:1px dashed color-mix(in srgb, var(--night-text) 22%, transparent);
+    font-size:.8rem; color:color-mix(in srgb, var(--night-text) 60%, transparent);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:.5rem;
+  }
+
+  .call-bar{
+    display:none; position:fixed; bottom:0; left:0; right:0; z-index:50;
+    box-shadow:0 -10px 30px rgba(0,0,0,.25);
+  }
+  .call-bar-btn{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:.5rem;
+    padding:.9rem .6rem; font-weight:700; font-family:var(--font-mono); letter-spacing:.02em;
+    font-size:.82rem; text-decoration:none;
+  }
+  .call-bar-btn.phone{ background:var(--accent); color:var(--accent-ink); }
+  .call-bar-btn.whatsapp{ background:var(--wa); color:var(--wa-ink); }
+  @media (max-width:720px){
+    .call-bar{ display:flex; }
+    body{ padding-bottom:60px; }
+  }
+
+  .reveal{ opacity:0; transform:translateY(14px); transition:opacity .5s ease, transform .5s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion:reduce){ .reveal{ opacity:1; transform:none; transition:none; } }
+</style>
+
+<canvas id="header-orb" aria-hidden="true"></canvas>
+
+<header>
+  <div class="wrap headerbar">
+    <a class="logo" href="#top">
+      <b>Force Digital</b>
+      <span>automatizări AI &amp; website-uri</span>
+    </a>
+    <nav class="links">
+      <a href="#servicii">Servicii</a>
+      <a href="#de-ce-noi">De ce noi</a>
+      <a href="#cum-lucram">Cum lucrăm</a>
+      <a href="#recenzii">Recenzii</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="header-cta">
+      <a class="btn btn-line" href="tel:+40733425402">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M6 3h3l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v3a2 2 0 0 1-2 2C10.5 20 4 13.5 4 5a2 2 0 0 1 2-2z"/></svg>
+        0733 425 402
+      </a>
+      <a class="btn btn-primary" href="#contact">Discută un proiect</a>
+      <button class="burger" id="burgerBtn" aria-expanded="false" aria-controls="mobilenav" aria-label="Deschide meniul">
+        <svg class="icon" viewBox="0 0 24 24"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      </button>
+    </div>
+  </div>
+  <div id="mobilenav">
+    <a href="#servicii">Servicii</a>
+    <a href="#de-ce-noi">De ce noi</a>
+    <a href="#cum-lucram">Cum lucrăm</a>
+    <a href="#recenzii">Recenzii</a>
+    <a href="#contact">Contact</a>
+    <a class="btn btn-primary" href="tel:+40733425402">Sună: 0733 425 402</a>
+    <a class="btn btn-whatsapp js-whatsapp" href="#" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--wa-ink);"><path d="M5 19l1.3-3.8A7.5 7.5 0 1 1 9.7 18z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5"/></svg>
+      Scrie pe WhatsApp
+    </a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <svg class="hero-bg" viewBox="0 0 400 160" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <path d="M40,86 C 120,26 160,26 200,54 C 260,92 300,92 360,80" fill="none" stroke="var(--line)" stroke-width="2" stroke-dasharray="2 10" stroke-linecap="round"/>
+      <circle cx="40" cy="86" r="9" fill="none" stroke="var(--accent-2)" stroke-width="2"/>
+      <circle cx="200" cy="54" r="12" fill="var(--accent-bright)"/>
+      <circle cx="360" cy="80" r="9" fill="none" stroke="var(--accent-2)" stroke-width="2"/>
+      <svg class="flow-pulse" x="0" y="0" width="10" height="10" style="color:var(--accent-2);">
+        <circle cx="5" cy="5" r="5" fill="currentColor"/>
+      </svg>
+    </svg>
+    <div class="wrap">
+      <p class="eyebrow">Automatizări AI · Website-uri</p>
+      <div class="hero-type">
+        <div class="line l1">Automatizezi</div>
+        <div class="line l2">ce se repetă.</div>
+        <div class="line l3">Construiești ce contează.</div>
+      </div>
+      <p class="hero-copy">Force Digital proiectează automatizări AI și site-uri care lucrează pentru afacerea ta — de la primul mesaj al unui client, până la rezultatul final.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#contact">Discută un proiect</a>
+        <a class="btn btn-ghost" href="tel:+40733425402">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M6 3h3l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v3a2 2 0 0 1-2 2C10.5 20 4 13.5 4 5a2 2 0 0 1 2-2z"/></svg>
+          0733 425 402
+        </a>
+        <a class="btn btn-whatsapp js-whatsapp" href="#" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--wa-ink);"><path d="M5 19l1.3-3.8A7.5 7.5 0 1 1 9.7 18z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5"/></svg>
+          WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band night">
+    <div class="wrap call-stack">
+      <p class="eyebrow">Contact rapid</p>
+      <h2 class="call-question">Ai un proces care<br>îți consumă timp?</h2>
+      <p>Scrie-ne pe WhatsApp sau sună — răspundem rapid și stabilim următorul pas.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="tel:+40733425402" style="font-family:var(--font-mono); font-size:1.02rem; padding:1rem 1.6rem;">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M6 3h3l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v3a2 2 0 0 1-2 2C10.5 20 4 13.5 4 5a2 2 0 0 1 2-2z"/></svg>
+          0733 425 402
+        </a>
+        <a class="btn btn-whatsapp js-whatsapp" href="#" target="_blank" rel="noopener" style="font-family:var(--font-mono); font-size:1.02rem; padding:1rem 1.6rem;">
+          <svg class="icon" viewBox="0 0 24 24" style="stroke:var(--wa-ink);"><path d="M5 19l1.3-3.8A7.5 7.5 0 1 1 9.7 18z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5"/></svg>
+          WhatsApp
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="servicii">
+    <div class="wrap">
+      <div class="section-head split reveal">
+        <div class="label-col">
+          <p class="eyebrow">Ce facem</p>
+          <p>Trei servicii care, construite bine, elimină cea mai mare parte din munca repetitivă.</p>
+        </div>
+        <h2>Serviciile noastre</h2>
+      </div>
+      <div class="cards">
+        <article class="card reveal">
+          <div class="card-icon">
+            <svg class="icon" viewBox="0 0 24 24"><polyline points="13,2 4,14 11,14 9,22 18,10 11,10 13,2"/></svg>
+          </div>
+          <h3>Automatizări AI</h3>
+          <p>Conectăm formulare, WhatsApp, email și CRM cu AI, ca să elimini munca repetitivă: preluare leaduri, răspunsuri automate, rapoarte.</p>
+          <a href="#contact">Află mai mult →</a>
+        </article>
+        <article class="card reveal">
+          <div class="card-icon">
+            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><circle cx="6.5" cy="6.5" r=".6" fill="currentColor" stroke="none"/><circle cx="9" cy="6.5" r=".6" fill="currentColor" stroke="none"/></svg>
+          </div>
+          <h3>Creare de site-uri</h3>
+          <p>Site-uri rapide, clare și optimizate pentru conversie — prezentare, landing page sau magazin online.</p>
+          <a href="#contact">Află mai mult →</a>
+        </article>
+        <article class="card reveal">
+          <div class="card-icon">
+            <svg class="icon" viewBox="0 0 24 24"><rect x="2.5" y="8" width="10" height="8" rx="4"/><rect x="10.5" y="8" width="10" height="8" rx="4"/></svg>
+          </div>
+          <h3>Integrare &amp; mentenanță</h3>
+          <p>Conectăm uneltele pe care le folosești deja și menținem totul funcțional pe termen lung.</p>
+          <a href="#contact">Află mai mult →</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="lane"></div></div>
+
+  <section id="de-ce-noi">
+    <div class="wrap reasons-grid">
+      <div>
+        <div class="section-head reveal" style="margin-bottom:1.8rem;">
+          <p class="eyebrow">De ce Force Digital</p>
+          <h2>Motivele pentru care ne aleg clienții</h2>
+        </div>
+        <ul class="reasons-list reveal">
+          <li>
+            <span class="check"><svg class="icon" style="width:14px;height:14px;stroke-width:3;" viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></span>
+            <span><strong>Livrare rapidă</strong><span>De la idee la un prim prototip funcțional în câteva zile, nu luni.</span></span>
+          </li>
+          <li>
+            <span class="check"><svg class="icon" style="width:14px;height:14px;stroke-width:3;" viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></span>
+            <span><strong>Soluții pe măsură</strong><span>Construim pentru procesul tău real, nu adaptăm un șablon generic.</span></span>
+          </li>
+          <li>
+            <span class="check"><svg class="icon" style="width:14px;height:14px;stroke-width:3;" viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></span>
+            <span><strong>Comunicare directă</strong><span>Lucrezi direct cu cine construiește, fără intermediari.</span></span>
+          </li>
+          <li>
+            <span class="check"><svg class="icon" style="width:14px;height:14px;stroke-width:3;" viewBox="0 0 24 24"><polyline points="4,13 9,18 20,6"/></svg></span>
+            <span><strong>Suport după lansare</strong><span>Rămânem alături de tine și după ce automatizarea sau site-ul e live.</span></span>
+          </li>
+        </ul>
+      </div>
+      <div class="network-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 300 220" width="100%" height="220">
+          <line x1="150" y1="110" x2="60" y2="40" stroke="var(--accent-2)" stroke-width="1.6" stroke-dasharray="2 8" opacity=".7"/>
+          <line x1="150" y1="110" x2="240" y2="40" stroke="var(--accent-2)" stroke-width="1.6" stroke-dasharray="2 8" opacity=".7"/>
+          <line x1="150" y1="110" x2="55" y2="175" stroke="var(--accent-2)" stroke-width="1.6" stroke-dasharray="2 8" opacity=".7"/>
+          <line x1="150" y1="110" x2="245" y2="175" stroke="var(--accent-2)" stroke-width="1.6" stroke-dasharray="2 8" opacity=".7"/>
+          <circle cx="150" cy="110" r="16" fill="var(--accent)"/>
+          <circle cx="60" cy="40" r="8" fill="none" stroke="var(--accent-2)" stroke-width="2"/>
+          <circle cx="240" cy="40" r="8" fill="none" stroke="var(--accent-2)" stroke-width="2"/>
+          <circle cx="55" cy="175" r="8" fill="none" stroke="var(--accent-2)" stroke-width="2"/>
+          <circle cx="245" cy="175" r="8" fill="none" stroke="var(--accent-2)" stroke-width="2"/>
+          <text class="node-label" x="20" y="26">WhatsApp</text>
+          <text class="node-label" x="205" y="26">Email</text>
+          <text class="node-label" x="18" y="200">CRM</text>
+          <text class="node-label" x="212" y="200">Site</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="band night process-band" id="cum-lucram">
+    <div class="wrap">
+      <p class="eyebrow">Cum lucrăm</p>
+      <h2>Un proces simplu, de la prima discuție la rezultat.</h2>
+      <p>Fără etape ascunse și fără livrări la nesfârșit — știi mereu ce urmează.</p>
+      <div class="process-flow" aria-hidden="false">
+        <div class="process-step active"><div class="process-dot">01</div><span>Discuție</span></div>
+        <div class="process-line"></div>
+        <div class="process-step"><div class="process-dot">02</div><span>Prototip</span></div>
+        <div class="process-line"></div>
+        <div class="process-step"><div class="process-dot">03</div><span>Livrare</span></div>
+        <div class="process-line"></div>
+        <div class="process-step"><div class="process-dot">04</div><span>Suport</span></div>
+      </div>
+      <a class="btn btn-primary" href="#contact" style="margin-top:2.4rem;">Discută un proiect</a>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap testimonial reveal">
+      <div class="avatar">FD</div>
+      <blockquote>„Force Digital ne-a automatizat preluarea comenzilor de pe WhatsApp direct în CRM — economisim aproape 2 ore în fiecare zi."</blockquote>
+      <cite>client Force Digital</cite>
+    </div>
+  </section>
+
+  <section id="recenzii">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Recenzii</p>
+        <h2>Ce spun clienții</h2>
+      </div>
+      <div class="reviews">
+        <div class="review reveal">
+          <div class="stars">
+            <svg viewBox="0 0 20 20"><polygon points="10,1 12.6,7 19,7.5 14,12 15.5,19 10,15.5 4.5,19 6,12 1,7.5 7.4,7"/></svg>
+            <svg viewBox="0 0 20 20"><polygon points="10,1 12.6,7 19,7.5 14,12 15.5,19 10,15.5 4.5,19 6,12 1,7.5 7.4,7"/></svg>
+            <svg viewBox="0 0 20 20"><polygon points="10,1 12.6,7 19,7.5 14,12 15.5,19 10,15.5 4.5,19 6,12 1,7.5 7.4,7"/></svg>
+            <svg viewBox="0 0 20 20"><polygon points="10,1 12.6,7 19,7.5 14,12 15.5,19 10,15.5 4.5,19 6,12 1,7.5 7.4,7"/></svg>
+            <svg viewBox="0 0 20 20"><polygon points="10,1 12.6,7 19,7.5 14,12 15.5,19 10,15.5 4.5,19 6,12 1,7.5 7.4,7"/></svg>
+          </div>
+          <p>„Am primit primul prototip de site în 4 zile. Comunicare foarte clară."</p>
+          <div class="review-name">Andrei M.</div>
+        </div>
+        <div class="review reveal">
+          <div class="stars">
+            <svg viewBox="0 0 20 20"><polygon points="10,1 12.6,7 19,7.5 14,12 15.5,19 10,15.5 4.5,19 6,12 1,7.5 7.4,7"/></svg>
+            <svg viewBox="0 0 20 20"><polygon points="10,1 12.6,7 19,7.5 14,12 15.5,19 10,15.5 4.5,19 6,12 1,7.5 7.4,7"/></svg>
+            <svg viewBox="0 0 20 20"><polygon points="10,1 12.6,7 19,7.5 14,12 15.5,19 10,15.5 4.5,19 6,12 1,7.5 7.4,7"/></svg>
+            <svg viewBox="0 0 20 20"><polygon points="10,1 12.6,7 19,7.5 14,12 15.5,19 10,15.5 4.5,19 6,12 1,7.5 7.4,7"/></svg>
+            <svg viewBox="0 0 20 20"><polygon points="10,1 12.6,7 19,7.5 14,12 15.5,19 10,15.5 4.5,19 6,12 1,7.5 7.4,7"/></svg>
+          </div>
+          <p>„Automatizarea de follow-up ne-a crescut rata de răspuns semnificativ."</p>
+          <div class="review-name">Elena P.</div>
+        </div>
+        <div class="review reveal">
+          <div class="stars">
+            <svg viewBox="0 0 20 20"><polygon points="10,1 12.6,7 19,7.5 14,12 15.5,19 10,15.5 4.5,19 6,12 1,7.5 7.4,7"/></svg>
+            <svg viewBox="0 0 20 20"><polygon points="10,1 12.6,7 19,7.5 14,12 15.5,19 10,15.5 4.5,19 6,12 1,7.5 7.4,7"/></svg>
+            <svg viewBox="0 0 20 20"><polygon points="10,1 12.6,7 19,7.5 14,12 15.5,19 10,15.5 4.5,19 6,12 1,7.5 7.4,7"/></svg>
+            <svg viewBox="0 0 20 20"><polygon points="10,1 12.6,7 19,7.5 14,12 15.5,19 10,15.5 4.5,19 6,12 1,7.5 7.4,7"/></svg>
+            <svg viewBox="0 0 20 20"><polygon points="10,1 12.6,7 19,7.5 14,12 15.5,19 10,15.5 4.5,19 6,12 1,7.5 7.4,7"/></svg>
+          </div>
+          <p>„Recomand pentru oricine vrea un site rapid și bine pus la punct."</p>
+          <div class="review-name">Studio Nord SRL</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="contact">
+  <div class="wrap foot-grid">
+    <div>
+      <a class="logo" href="#top" style="margin-bottom:1rem; display:inline-flex;">
+        <b style="color:var(--night-text);">Force Digital</b>
+      </a>
+      <p style="max-width:32ch;">Automatizări AI și website-uri construite pentru afacerea ta, nu după un șablon.</p>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:+40733425402">0733 425 402</a></li>
+        <li><a href="mailto:mutudanielalexandru1@gmail.com">mutudanielalexandru1@gmail.com</a></li>
+        <li><a class="js-whatsapp" href="#" target="_blank" rel="noopener">Scrie pe WhatsApp</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Navigare</h4>
+      <ul>
+        <li><a href="#servicii">Servicii</a></li>
+        <li><a href="#de-ce-noi">De ce noi</a></li>
+        <li><a href="#cum-lucram">Cum lucrăm</a></li>
+        <li><a href="#recenzii">Recenzii</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wrap foot-bottom">
+    <span>© 2026 Force Digital. Toate drepturile rezervate.</span>
+    <span>Răspundem de obicei în aceeași zi.</span>
+  </div>
+</footer>
+
+<div class="call-bar">
+  <a class="call-bar-btn phone" href="tel:+40733425402">
+    <svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M6 3h3l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v3a2 2 0 0 1-2 2C10.5 20 4 13.5 4 5a2 2 0 0 1 2-2z"/></svg>
+    Sună acum
+  </a>
+  <a class="call-bar-btn whatsapp js-whatsapp" href="#" target="_blank" rel="noopener">
+    <svg class="icon" viewBox="0 0 24 24" style="width:18px;height:18px; stroke:var(--wa-ink);"><path d="M5 19l1.3-3.8A7.5 7.5 0 1 1 9.7 18z"/><path d="M9 9.5c0 3 2.5 5.5 5.5 5.5"/></svg>
+    WhatsApp
+  </a>
+</div>
+
+<script>
+  var waLink = 'https://wa.me/40733425402?text=' + encodeURIComponent('Buna ziua! As dori sa discutam despre un proiect (automatizare AI / site).');
+  document.querySelectorAll('.js-whatsapp').forEach(function(a){ a.setAttribute('href', waLink); });
+
+  var burger = document.getElementById('burgerBtn');
+  var nav = document.getElementById('mobilenav');
+  burger.addEventListener('click', function(){
+    var open = nav.classList.toggle('open');
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    var els = document.querySelectorAll('.reveal');
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.15 });
+    els.forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+  }
+
+  (function(){
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var canvas = document.getElementById('header-orb');
+    var bar = document.querySelector('.headerbar');
+    if (!canvas || !bar) return;
+    var gl = canvas.getContext('webgl', { alpha:true, premultipliedAlpha:false, antialias:true })
+          || canvas.getContext('experimental-webgl', { alpha:true, premultipliedAlpha:false, antialias:true });
+    if (!gl) return;
+
+    var vertSrc = [
+      'precision highp float;',
+      'attribute vec2 position;',
+      'attribute vec2 uv;',
+      'varying vec2 vUv;',
+      'void main() {',
+      '  vUv = uv;',
+      '  gl_Position = vec4(position, 0.0, 1.0);',
+      '}'
+    ].join('\n');
+
+    var fragSrc = [
+      'precision highp float;',
+      'uniform float iTime;',
+      'uniform vec3 iResolution;',
+      'uniform float hue;',
+      'uniform float hover;',
+      'uniform float rot;',
+      'uniform float hoverIntensity;',
+      'varying vec2 vUv;',
+      'vec3 rgb2yiq(vec3 c){ float y=dot(c,vec3(0.299,0.587,0.114)); float i=dot(c,vec3(0.596,-0.274,-0.322)); float q=dot(c,vec3(0.211,-0.523,0.312)); return vec3(y,i,q); }',
+      'vec3 yiq2rgb(vec3 c){ float r=c.x+0.956*c.y+0.621*c.z; float g=c.x-0.272*c.y-0.647*c.z; float b=c.x-1.106*c.y+1.703*c.z; return vec3(r,g,b); }',
+      'vec3 adjustHue(vec3 color, float hueDeg){ float hueRad=hueDeg*3.14159265/180.0; vec3 yiq=rgb2yiq(color); float cosA=cos(hueRad); float sinA=sin(hueRad); float i=yiq.y*cosA-yiq.z*sinA; float q=yiq.y*sinA+yiq.z*cosA; yiq.y=i; yiq.z=q; return yiq2rgb(yiq); }',
+      'vec3 hash33(vec3 p3){ p3=fract(p3*vec3(0.1031,0.11369,0.13787)); p3+=dot(p3,p3.yxz+19.19); return -1.0+2.0*fract(vec3(p3.x+p3.y,p3.x+p3.z,p3.y+p3.z)*p3.zyx); }',
+      'float snoise3(vec3 p){',
+      '  const float K1=0.333333333; const float K2=0.166666667;',
+      '  vec3 i=floor(p+(p.x+p.y+p.z)*K1);',
+      '  vec3 d0=p-(i-(i.x+i.y+i.z)*K2);',
+      '  vec3 e=step(vec3(0.0), d0-d0.yzx);',
+      '  vec3 i1=e*(1.0-e.zxy);',
+      '  vec3 i2=1.0-e.zxy*(1.0-e);',
+      '  vec3 d1=d0-(i1-K2);',
+      '  vec3 d2=d0-(i2-K1);',
+      '  vec3 d3=d0-0.5;',
+      '  vec4 h=max(0.6-vec4(dot(d0,d0),dot(d1,d1),dot(d2,d2),dot(d3,d3)),0.0);',
+      '  vec4 n=h*h*h*h*vec4(dot(d0,hash33(i)),dot(d1,hash33(i+i1)),dot(d2,hash33(i+i2)),dot(d3,hash33(i+1.0)));',
+      '  return dot(vec4(31.316), n);',
+      '}',
+      'vec4 extractAlpha(vec3 colorIn){ float a=max(max(colorIn.r,colorIn.g),colorIn.b); return vec4(colorIn.rgb/(a+1e-5), a); }',
+      'const vec3 baseColor1 = vec3(0.611765, 0.262745, 0.996078);',
+      'const vec3 baseColor2 = vec3(0.298039, 0.760784, 0.913725);',
+      'const vec3 baseColor3 = vec3(0.062745, 0.078431, 0.600000);',
+      'const float innerRadius = 0.6;',
+      'const float noiseScale = 0.65;',
+      'float light1(float intensity, float attenuation, float dist){ return intensity/(1.0+dist*attenuation); }',
+      'float light2(float intensity, float attenuation, float dist){ return intensity/(1.0+dist*dist*attenuation); }',
+      'vec4 draw(vec2 uv){',
+      '  vec3 color1=adjustHue(baseColor1,hue); vec3 color2=adjustHue(baseColor2,hue); vec3 color3=adjustHue(baseColor3,hue);',
+      '  float ang=atan(uv.y,uv.x); float len=length(uv); float invLen = len>0.0 ? 1.0/len : 0.0;',
+      '  float n0=snoise3(vec3(uv*noiseScale, iTime*0.5))*0.5+0.5;',
+      '  float r0=mix(mix(innerRadius,1.0,0.4), mix(innerRadius,1.0,0.6), n0);',
+      '  float d0=distance(uv, (r0*invLen)*uv);',
+      '  float v0=light1(1.0,10.0,d0); v0 *= smoothstep(r0*1.05, r0, len);',
+      '  float cl=cos(ang+iTime*2.0)*0.5+0.5;',
+      '  float a=iTime*-1.0; vec2 pos=vec2(cos(a),sin(a))*r0; float d=distance(uv,pos);',
+      '  float v1=light2(1.5,5.0,d); v1 *= light1(1.0,50.0,d0);',
+      '  float v2=smoothstep(1.0, mix(innerRadius,1.0,n0*0.5), len);',
+      '  float v3=smoothstep(innerRadius, mix(innerRadius,1.0,0.5), len);',
+      '  vec3 col=mix(color1,color2,cl); col=mix(color3,col,v0); col=(col+v1)*v2*v3; col=clamp(col,0.0,1.0);',
+      '  return extractAlpha(col);',
+      '}',
+      'vec4 mainImage(vec2 fragCoord){',
+      '  vec2 center=iResolution.xy*0.5; float size=min(iResolution.x,iResolution.y);',
+      '  vec2 uv=(fragCoord-center)/size*2.0;',
+      '  float angle=rot; float s=sin(angle); float c=cos(angle);',
+      '  uv=vec2(c*uv.x-s*uv.y, s*uv.x+c*uv.y);',
+      '  uv.x += hover*hoverIntensity*0.1*sin(uv.y*10.0+iTime);',
+      '  uv.y += hover*hoverIntensity*0.1*sin(uv.x*10.0+iTime);',
+      '  return draw(uv);',
+      '}',
+      'void main(){',
+      '  vec2 fragCoord = vUv * iResolution.xy;',
+      '  vec4 col = mainImage(fragCoord);',
+      '  gl_FragColor = vec4(col.rgb*col.a, col.a);',
+      '}'
+    ].join('\n');
+
+    function compile(type, src){
+      var s = gl.createShader(type);
+      gl.shaderSource(s, src);
+      gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) { console.warn(gl.getShaderInfoLog(s)); return null; }
+      return s;
+    }
+    var vs = compile(gl.VERTEX_SHADER, vertSrc);
+    var fs = compile(gl.FRAGMENT_SHADER, fragSrc);
+    if (!vs || !fs) return;
+    var program = gl.createProgram();
+    gl.attachShader(program, vs);
+    gl.attachShader(program, fs);
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) { console.warn(gl.getProgramInfoLog(program)); return; }
+    gl.useProgram(program);
+
+    var posBuf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, posBuf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+    var posLoc = gl.getAttribLocation(program, 'position');
+    gl.enableVertexAttribArray(posLoc);
+    gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+
+    var uvBuf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, uvBuf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0,0, 2,0, 0,2]), gl.STATIC_DRAW);
+    var uvLoc = gl.getAttribLocation(program, 'uv');
+    gl.enableVertexAttribArray(uvLoc);
+    gl.vertexAttribPointer(uvLoc, 2, gl.FLOAT, false, 0, 0);
+
+    var uTime = gl.getUniformLocation(program, 'iTime');
+    var uRes = gl.getUniformLocation(program, 'iResolution');
+    var uHue = gl.getUniformLocation(program, 'hue');
+    var uHover = gl.getUniformLocation(program, 'hover');
+    var uRot = gl.getUniformLocation(program, 'rot');
+    var uHoverIntensity = gl.getUniformLocation(program, 'hoverIntensity');
+    gl.uniform1f(uHue, 0);
+    gl.uniform1f(uHoverIntensity, 0.5);
+    gl.clearColor(0, 0, 0, 0);
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+    function resize(){
+      var h = bar.getBoundingClientRect().height || 84;
+      canvas.style.height = h + 'px';
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var w = canvas.clientWidth, hh = canvas.clientHeight;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(hh * dpr);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.uniform3f(uRes, canvas.width, canvas.height, canvas.width / Math.max(canvas.height, 1));
+    }
+    window.addEventListener('resize', resize);
+    if ('ResizeObserver' in window) { new ResizeObserver(resize).observe(bar); }
+    resize();
+
+    var hoverTarget = 0, hoverVal = 0;
+    window.addEventListener('pointermove', function(e){
+      hoverTarget = (e.clientY <= canvas.clientHeight) ? 0.6 : 0;
+    }, { passive:true });
+
+    var rot = 0, lastT = 0;
+    function frame(t){
+      requestAnimationFrame(frame);
+      var dt = lastT ? (t - lastT) * 0.001 : 0;
+      lastT = t;
+      rot += dt * 0.15;
+      hoverVal += (hoverTarget - hoverVal) * 0.05;
+      gl.uniform1f(uTime, t * 0.001);
+      gl.uniform1f(uRot, rot);
+      gl.uniform1f(uHover, hoverVal);
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    }
+    requestAnimationFrame(frame);
+  })();
+</script>
